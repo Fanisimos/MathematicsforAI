@@ -4,6 +4,7 @@ import { Quiz } from '../components/Quiz';
 import { MathText, Tex } from '../components/Tex';
 import { Callout, Section, Slider, Stat, Tabs } from '../components/UI';
 import { easeInOut, fmt, quadRoots, simpson, tween, type Fn } from '../lib/math';
+import { MatlabSection } from '../matlab/MatlabSection';
 import { ALL_GENS } from './gens';
 import { autoView } from './shared';
 
@@ -149,6 +150,8 @@ export default function Applications() {
       <Section id="prob" kicker="Application 3 · AI" title="Probability is area">
         <ProbabilityArea />
       </Section>
+
+      <MatlabSection topic="applications" />
 
       <Section id="practice" kicker="Practice" title="Applications drills">
         <Quiz id="w12-quiz" title="Applications Drills" blurb="Areas between curves, average values, signed area and probability densities." gens={ALL_GENS.applications} />

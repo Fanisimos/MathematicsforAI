@@ -6,6 +6,7 @@ import { MathText, Tex } from '../components/Tex';
 import { Callout, Card, Confetti, RuleCard, Section, Slider, Stat, Tabs } from '../components/UI';
 import { clamp, fmt, pick, riemann, simpson, type Fn, type RiemannMethod } from '../lib/math';
 import { addXp, recordBest } from '../lib/progress';
+import { MatlabSection } from '../matlab/MatlabSection';
 import { ALL_GENS } from './gens';
 import { autoView } from './shared';
 
@@ -318,6 +319,8 @@ export default function Integration() {
       <Section id="play" kicker="Play" title="Be the integral">
         <AreaGuess />
       </Section>
+
+      <MatlabSection topic="integration" />
 
       <Section id="practice" kicker="Practice" title="Integration drills">
         <Quiz id="w10-quiz" title="Integration Drills" blurb="Antiderivatives, definite integrals, standard integrals and rectangle estimates." gens={ALL_GENS.integration} />

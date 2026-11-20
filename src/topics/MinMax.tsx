@@ -6,6 +6,7 @@ import { MathText, Tex } from '../components/Tex';
 import { Callout, Card, Confetti, RuleCard, Section, Slider, Stat } from '../components/UI';
 import { clamp, deriv, fmt, lerp, polyTex, quadRoots, tween, type Fn, type View } from '../lib/math';
 import { addXp, recordBest, useProgress } from '../lib/progress';
+import { MatlabSection } from '../matlab/MatlabSection';
 import { ALL_GENS } from './gens';
 
 /* ── 1. Stationary point explorer ────────────────────────── */
@@ -296,6 +297,8 @@ export default function MinMax() {
       <Section id="play" kicker="Play" title="Train an AI… by hand" intro="Machine learning = minimising a **loss function** $L$. Neural nets can't solve $L'(x) = 0$ with algebra (millions of variables!), so they take small steps downhill instead. You're the optimiser now.">
         <DescentGolf />
       </Section>
+
+      <MatlabSection topic="optimisation" />
 
       <Section id="practice" kicker="Practice" title="Optimisation drills">
         <Quiz id="w8-quiz" title="Max, Min & Descent" blurb="Find stationary points, classify them with $f''$, and compute gradient-descent steps." gens={ALL_GENS.optimisation} />

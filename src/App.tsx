@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { Suspense, useEffect, useState } from 'react';
 import { HeroDescent } from './components/HeroDescent';
+import { MatlabPage } from './matlab/MatlabPage';
 import { MathText } from './components/Tex';
 import { Callout, ProgressRing } from './components/UI';
 import { currentWeek, daysUntil, DEADLINES, TB1 } from './lib/course';
@@ -38,6 +39,10 @@ function Header() {
               <span className="nav-emoji">{t.emoji}</span>
             </a>
           ))}
+          <a href="#/matlab" title="MATLAB Lab" className="nav-lab">
+            <span className="nav-wk mono">LAB</span>
+            <span className="nav-emoji">💻</span>
+          </a>
         </nav>
         <div className="xp-pill" title={`${L.toNext} XP to next level`}>
           <span className="lvl mono">Lv {L.level}</span>
@@ -76,6 +81,9 @@ function Home() {
               </a>
               <a className="btn btn-ghost btn-lg" href="#/topic/applications?boss">
                 👾 Test warm-up
+              </a>
+              <a className="btn btn-ghost btn-lg" href="#/matlab">
+                💻 MATLAB Lab
               </a>
             </div>
           </motion.div>
@@ -129,6 +137,14 @@ function Home() {
               </motion.a>
             ))}
           </div>
+          <a href="#/matlab" className="lab-banner">
+            <span className="lab-icon">💻</span>
+            <div>
+              <strong>MATLAB Lab</strong>
+              <p>Every topic as short, commented MATLAB scripts for the workshops: differentiate, find minima, run gradient descent and integrate, in code.</p>
+            </div>
+            <span className="lab-go">Open →</span>
+          </a>
         </section>
 
         <section className="section">
@@ -260,6 +276,7 @@ export default function App() {
   let page;
   if (parts.length === 0) page = <Home />;
   else if (parts[0] === 'topic' && parts[1]) page = <TopicPage id={parts[1]} focus={query} />;
+  else if (parts[0] === 'matlab') page = <MatlabPage />;
   else page = <NotFound />;
 
   return (

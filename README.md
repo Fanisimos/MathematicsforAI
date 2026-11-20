@@ -15,6 +15,8 @@ Unofficial student project. Not affiliated with or endorsed by the university.
 | 11 | Further integration | substitution & by-parts steppers with numeric check | – |
 | 12 | Applications | area between curves, average value, probability | Boss quiz (timed) |
 
+Every module also has a **Do it in MATLAB** section (commented scripts + a "Predict the Output" quiz), and all scripts are collected on the **MATLAB Lab** page (`#/matlab`). Scripts live in `src/matlab/snippets.ts`.
+
 Every module ends with randomised drills (`src/topics/gens.ts`) that show worked solutions. XP and best scores are kept in the browser's `localStorage`.
 
 ## Run locally

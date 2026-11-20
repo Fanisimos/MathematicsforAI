@@ -7,6 +7,7 @@ import { MathText, Tex } from '../components/Tex';
 import { Callout, Card, Confetti, RuleCard, Section, Slider, Stat, Tabs } from '../components/UI';
 import { deriv, fmt } from '../lib/math';
 import { addXp, recordBest } from '../lib/progress';
+import { MatlabSection } from '../matlab/MatlabSection';
 import { ALL_GENS } from './gens';
 
 /* ── 1. Chain-rule machine ───────────────────────────────── */
@@ -339,6 +340,8 @@ export default function Partial() {
       <Section id="play" kicker="Play" title="Climb using only the gradient" intro="The gradient $\nabla f = \left(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}\right)$ always points in the steepest uphill direction.">
         <SummitFog />
       </Section>
+
+      <MatlabSection topic="partial" />
 
       <Section id="practice" kicker="Practice" title="Chain, product & partial drills">
         <Quiz id="w9-quiz" title="Chain & Partial Drills" blurb="Chain rule, product rule, partial derivatives and gradients at a point." gens={ALL_GENS.partial} />

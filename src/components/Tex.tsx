@@ -13,12 +13,13 @@ export function Tex({ children, block = false }: { children: string; block?: boo
   );
 }
 
-/** Text with inline $...$ and display $$...$$ maths, plus **bold**. */
+/** Text with inline $...$ and display $$...$$ maths, **bold** and `code`. */
 export function MathText({ children }: { children: string }) {
-  const parts = children.split(/(\$\$[\s\S]+?\$\$|\$[^$]+?\$|\*\*[^*]+\*\*)/g);
+  const parts = children.split(/(`[^`]+`|\$\$[\s\S]+?\$\$|\$[^$]+?\$|\*\*[^*]+\*\*)/g);
   return (
     <>
       {parts.map((p, i) => {
+        if (p.startsWith('`') && p.length > 2) return <code key={i} className="inline-code">{p.slice(1, -1)}</code>;
         if (p.startsWith('$$') && p.length > 4) return <Tex key={i} block>{p.slice(2, -2)}</Tex>;
         if (p.startsWith('$') && p.length > 2) return <Tex key={i}>{p.slice(1, -1)}</Tex>;
         if (p.startsWith('**') && p.length > 4) return <strong key={i}>{p.slice(2, -2)}</strong>;

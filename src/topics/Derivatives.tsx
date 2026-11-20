@@ -6,6 +6,7 @@ import { MathText, Tex } from '../components/Tex';
 import { Callout, Card, Confetti, RuleCard, Section, Slider, Stat, Tabs } from '../components/UI';
 import { clamp, deriv, fmt, pick, tween } from '../lib/math';
 import { addXp, recordBest } from '../lib/progress';
+import { MatlabSection } from '../matlab/MatlabSection';
 import { ALL_GENS } from './gens';
 import { autoView, type FnDef } from './shared';
 
@@ -347,6 +348,8 @@ export default function Derivatives() {
       <Section id="play" kicker="Play" title="Train your eye">
         <SlopeSniper />
       </Section>
+
+      <MatlabSection topic="derivatives" />
 
       <Section id="practice" kicker="Practice" title="Derivative drills">
         <Quiz id="w7-quiz" title="Derivative Drills" blurb="Power rule, polynomials, tangent gradients and the standard derivatives, all randomised. Wrong answers show full working." gens={ALL_GENS.derivatives} />

@@ -6,6 +6,7 @@ import { MathText, Tex } from '../components/Tex';
 import { Callout, Card, RuleCard, Section, Stat, Tabs } from '../components/UI';
 import { fmt, simpson, type Fn } from '../lib/math';
 import { addXp } from '../lib/progress';
+import { MatlabSection } from '../matlab/MatlabSection';
 import { ALL_GENS } from './gens';
 import { autoView } from './shared';
 
@@ -272,6 +273,8 @@ export default function Techniques() {
           <MathText>{`**Definite integrals + substitution:** either change the limits to $u$-values, or substitute back to $x$ before plugging in. Mixing the two is the most common lost mark.`}</MathText>
         </Callout>
       </Section>
+
+      <MatlabSection topic="techniques" />
 
       <Section id="practice" kicker="Practice" title="Technique drills">
         <Quiz id="w11-quiz" title="Substitution & Parts" blurb="Choose substitutions, pick $u$ for by parts, and evaluate integrals." gens={ALL_GENS.techniques} />
