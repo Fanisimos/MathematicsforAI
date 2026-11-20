@@ -1,6 +1,7 @@
 import type { Gen } from '../components/Quiz';
 import { fmt, pick, polyTex, randInt, randNonZero } from '../lib/math';
 import { CodeView } from './MatlabCode';
+import { ML_GENS2 } from './matlabGens2';
 
 const vec = (v: number[]) => `\`[${v.map((n) => fmt(n, 4)).join(' ')}]\``;
 
@@ -180,11 +181,26 @@ export const mlPartialSubs: Gen = () => {
   };
 };
 
-export const ML_GENS: Record<string, Gen[]> = {
+const ML_CALC: Record<string, Gen[]> = {
   derivatives: [mlPolyder, mlSymDiff, mlDiffVec, mlElementwise],
   optimisation: [mlGDLoop, mlRoots, mlPolyder, mlPolyval],
   partial: [mlPartialSubs, mlSymDiff, mlElementwise],
   integration: [mlPolyint, mlSymInt, mlIntegral, mlTrapz],
   techniques: [mlSymInt, mlIntegral, mlElementwise],
   applications: [mlIntegral, mlTrapz, mlPolyval, mlRoots],
+};
+
+// Topics with only one or two MATLAB-specific generators also get the general ones mixed in.
+export const ML_GENS: Record<string, Gen[]> = {
+  ...ML_CALC,
+  sets: [...ML_GENS2.sets, mlElementwise],
+  functions: [...ML_GENS2.functions, mlElementwise, mlPolyval],
+  polynomials: [...ML_GENS2.polynomials, mlRoots, mlPolyval, mlPolyder],
+  explog: [...ML_GENS2.explog, mlElementwise],
+  vectors: ML_GENS2.vectors,
+  linsys: ML_GENS2.linsys.concat(mlElementwise),
+  lu: ML_GENS2.lu,
+  iterative: [...ML_GENS2.iterative, mlGDLoop],
+  newton: [...ML_GENS2.newton, mlRoots],
+  numint: [...ML_GENS2.numint, mlIntegral, mlTrapz],
 };

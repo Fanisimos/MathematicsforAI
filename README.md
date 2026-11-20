@@ -6,18 +6,30 @@ Unofficial student project. Not affiliated with or endorsed by the university.
 
 ## Modules
 
-| Week | Topic | Interactive pieces | Game |
-|---|---|---|---|
-| 7 | Gradient & differentiation | rise/run, secant → tangent (h → 0), paint f′(x) | Slope Sniper |
-| 8 | Minimum & maximum | stationary-point explorer with sign chart | Gradient Descent Golf |
-| 9 | Chain rule & partials | chain-rule machine, surface slices + gradient | Summit in the Fog |
-| 10 | Integration | Riemann sums, Fundamental Theorem of Calculus | Area Guess |
-| 11 | Further integration | substitution & by-parts steppers with numeric check | – |
-| 12 | Applications | area between curves, average value, probability | Boss quiz (timed) |
+All 16 topics of Teaching Block 1, grouped as on the home page.
+
+| Week | Topic | Highlights |
+|---|---|---|
+| 1 | Sets, logic & number systems | Venn explorer, *Shade It* (3-set game), *Number Sorter*, truth tables, √2 proof |
+| 2 | Mapping & functions | mapping builder (injective/surjective live), composition, inverse reflection |
+| 2 | Quadratics & polynomials | discriminant explorer, drag-the-roots cubic, curve fitting & overfitting |
+| 3 | Exponentials & logarithms | e as its own slope, log as inverse, slide rule, softmax & cross-entropy |
+| 3 | Vectors, matrices & norms | vector playground, p-norm unit balls, matrix as transformation, matrix multiply |
+| 4 | Linear systems & Gaussian elimination | 2×2 geometry, elimination stepper (watch / do-it-yourself) |
+| 5 | LU decomposition & error | LU stepper, cost chart, floating point, conditioning, iterative refinement |
+| 7 | Gradient & differentiation | secant → tangent, paint f′(x), *Slope Sniper* |
+| 7 | Iterative methods | Jacobi vs Gauss–Seidel paths, iteration table, cobweb diagrams |
+| 8 | Minimum & maximum | stationary points, *Gradient Descent Golf* |
+| 8–9 | Newton's method | animated Newton, bisection/secant/Newton race, multivariable Newton basins |
+| 9 | Chain rule & partials | chain-rule machine, surface slices, *Summit in the Fog* |
+| 10 | Integration | Riemann sums, Fundamental Theorem, *Area Guess* |
+| 10–11 | Numerical integration | trapezium/midpoint/Simpson, log-log convergence, Monte Carlo |
+| 11 | Further integration | substitution & by-parts steppers with numeric check |
+| 12 | Applications | area between curves, average value, probability, TB1 boss quiz |
 
 Every module also has a **Do it in MATLAB** section (commented scripts + a "Predict the Output" quiz), and all scripts are collected on the **MATLAB Lab** page (`#/matlab`). Scripts live in `src/matlab/snippets.ts`.
 
-Every module ends with randomised drills (`src/topics/gens.ts`) that show worked solutions. XP and best scores are kept in the browser's `localStorage`.
+Every module ends with randomised drills (`src/topics/gens*.tsx`) that show worked solutions. XP and best scores are kept in the browser's `localStorage`.
 
 ## Run locally
 

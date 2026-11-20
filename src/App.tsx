@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Suspense, useEffect, useState } from 'react';
 import { HeroDescent } from './components/HeroDescent';
 import { MatlabPage } from './matlab/MatlabPage';
@@ -6,7 +6,7 @@ import { MathText } from './components/Tex';
 import { Callout, ProgressRing } from './components/UI';
 import { currentWeek, daysUntil, DEADLINES, TB1 } from './lib/course';
 import { levelInfo, resetProgress, useProgress } from './lib/progress';
-import { TOPICS, topicPct } from './topics';
+import { GROUPS, TOPICS, topicPct, type TopicMeta } from './topics';
 
 function useRoute() {
   const read = () => window.location.hash.replace(/^#\/?/, '');
@@ -22,6 +22,49 @@ function useRoute() {
   return route;
 }
 
+function weekText(t: TopicMeta) {
+  return t.weekLabel ?? `Week ${t.week}`;
+}
+
+function TopicsMenu() {
+  const [open, setOpen] = useState(false);
+  const { best } = useProgress();
+  useEffect(() => {
+    const close = () => setOpen(false);
+    window.addEventListener('hashchange', close);
+    return () => window.removeEventListener('hashchange', close);
+  }, []);
+  return (
+    <div className="menu">
+      <button className="menu-btn" onClick={() => setOpen(!open)} aria-expanded={open}>
+        📚 <span className="hide-sm">All </span>topics <span className="caret">{open ? '▴' : '▾'}</span>
+      </button>
+      <AnimatePresence>
+        {open && (
+          <>
+            <div className="menu-scrim" onClick={() => setOpen(false)} />
+            <motion.div className="menu-panel" initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.15 }}>
+              {GROUPS.map((g) => (
+                <div key={g.id} className="menu-group">
+                  <span className="kicker">{g.title}</span>
+                  {TOPICS.filter((t) => t.group === g.id).map((t) => (
+                    <a key={t.id} href={`#/topic/${t.id}`} className="menu-item">
+                      <span className="menu-emoji">{t.emoji}</span>
+                      <span className="menu-title">{t.title}</span>
+                      <span className="menu-wk mono">{weekText(t).replace('Weeks ', 'W').replace('Week ', 'W')}</span>
+                      {topicPct(t, best) >= 0.7 && <span className="menu-done">✓</span>}
+                    </a>
+                  ))}
+                </div>
+              ))}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 function Header() {
   const { xp } = useProgress();
   const L = levelInfo(xp);
@@ -33,15 +76,10 @@ function Header() {
           descent<span className="brand-dim">.maths</span>
         </a>
         <nav className="topnav">
-          {TOPICS.map((t) => (
-            <a key={t.id} href={`#/topic/${t.id}`} title={t.title}>
-              <span className="nav-wk mono">W{t.week}</span>
-              <span className="nav-emoji">{t.emoji}</span>
-            </a>
-          ))}
+          <TopicsMenu />
           <a href="#/matlab" title="MATLAB Lab" className="nav-lab">
-            <span className="nav-wk mono">LAB</span>
             <span className="nav-emoji">💻</span>
+            <span className="nav-txt">MATLAB Lab</span>
           </a>
         </nav>
         <div className="xp-pill" title={`${L.toNext} XP to next level`}>
@@ -70,14 +108,14 @@ function Home() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
             <span className="kicker">Mathematics for AI · Teaching Block 1</span>
             <h1>
-              Calculus, but you can <span className="grad-text">play</span> it.
+              Maths for AI, but you can <span className="grad-text">play</span> it.
             </h1>
             <p className="lead">
-              Drag curves, shrink secants into tangents, golf your way down a loss function and climb mountains in the fog. Every idea from the lectures, made visual, interactive and a bit competitive.
+              Shade Venn diagrams, bend space with matrices, race Newton against bisection, golf your way down a loss function and climb mountains in the fog. All 16 topics of Teaching Block 1, made visual, interactive and a bit competitive.
             </p>
             <div className="btn-row">
               <a className="btn btn-primary btn-lg" href={`#/topic/${thisWeekTopic.id}`}>
-                {wk && thisWeekTopic.week === wk ? `This week: ${thisWeekTopic.title}` : 'Start with derivatives'} →
+                {wk && thisWeekTopic.week === wk ? `This week: ${thisWeekTopic.title}` : `Start: ${thisWeekTopic.title}`} →
               </a>
               <a className="btn btn-ghost btn-lg" href="#/topic/applications?boss">
                 👾 Test warm-up
@@ -113,30 +151,41 @@ function Home() {
         <section className="section">
           <div className="section-head">
             <span className="kicker">Interactive modules</span>
-            <h2>The calculus half of TB1</h2>
-            <p className="lead">Each module: an intuition-first visual, the rules on one card, a mini-game and randomised drills with full worked solutions.</p>
+            <h2>Every topic in Teaching Block 1</h2>
+            <p className="lead">Each module: intuition-first visuals, the rules on one card, MATLAB code for the workshops, and randomised drills with full worked solutions. Go back to any of them whenever you need to revise.</p>
           </div>
-          <div className="topic-grid">
-            {TOPICS.map((t, i) => (
-              <motion.a
-                key={t.id}
-                href={`#/topic/${t.id}`}
-                className={`topic-card ${t.week === wk ? 'now' : ''}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.06 }}
-                whileHover={{ y: -6 }}
-              >
-                <div className="topic-card-top">
-                  <span className="topic-emoji">{t.emoji}</span>
-                  <ProgressRing pct={topicPct(t, best)} />
-                </div>
-                <span className="mono week-tag">Week {t.week}{t.week === wk ? ' · this week' : ''}</span>
-                <h3>{t.title}</h3>
-                <p>{t.tagline}</p>
-              </motion.a>
-            ))}
-          </div>
+          {GROUPS.map((g) => (
+            <div key={g.id} className="topic-group">
+              <div className="group-head">
+                <h3>{g.title}</h3>
+                <span className="muted small">{g.sub}</span>
+              </div>
+              <div className="topic-grid">
+                {TOPICS.filter((t) => t.group === g.id).map((t, i) => (
+                  <motion.a
+                    key={t.id}
+                    href={`#/topic/${t.id}`}
+                    className={`topic-card ${t.week === wk ? 'now' : ''}`}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                    whileHover={{ y: -6 }}
+                  >
+                    <div className="topic-card-top">
+                      <span className="topic-emoji">{t.emoji}</span>
+                      <ProgressRing pct={topicPct(t, best)} />
+                    </div>
+                    <span className="mono week-tag">
+                      {weekText(t)}
+                      {t.week === wk ? ' · this week' : ''}
+                    </span>
+                    <h3>{t.title}</h3>
+                    <p>{t.tagline}</p>
+                  </motion.a>
+                ))}
+              </div>
+            </div>
+          ))}
           <a href="#/matlab" className="lab-banner">
             <span className="lab-icon">💻</span>
             <div>
@@ -155,18 +204,18 @@ function Home() {
           <ol className="timeline">
             {TB1.map((w) => (
               <li key={w.week} className={`tl-week ${w.week === wk ? 'now' : ''} ${wk && w.week < wk ? 'past' : ''}`}>
-                <span className="tl-num mono">{w.week}</span>
+                <span className="tl-num mono">{wk && w.week < wk ? '✓' : w.week}</span>
                 <div className="tl-body">
+                  <span className="tl-wk mono">Week {w.week}{w.week === wk ? ' · now' : ''}</span>
                   {w.note && <span className="tl-note">{w.note}</span>}
                   {w.sessions.map((s) =>
-                    s.topicId ? (
-                      <a key={s.title} href={`#/topic/${s.topicId}`} className="tl-session live">
-                        {s.title} <span className="chip chip-live">play ▸</span>
+                    s.href ? (
+                      <a key={s.title} href={s.href} className={`tl-session live ${s.kind === 'assessment' ? 'assess' : ''}`}>
+                        {s.title} <span className="chip chip-live">{s.kind === 'assessment' ? 'practise ▸' : s.href === '#/matlab' ? 'lab ▸' : 'open ▸'}</span>
                       </a>
                     ) : (
-                      <span key={s.title} className={`tl-session ${s.kind === 'assessment' ? 'assess' : ''}`}>
+                      <span key={s.title} className="tl-session assess">
                         {s.title}
-                        {s.kind !== 'assessment' && <span className="chip chip-soon">soon</span>}
                       </span>
                     ),
                   )}
@@ -213,7 +262,7 @@ function TopicPage({ id, focus }: { id: string; focus?: string }) {
       <motion.header className="topic-hero" key={T.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
         <div className="topic-hero-main">
           <span className="kicker">
-            Week {T.week} · {T.emoji}
+            {weekText(T)} · {T.emoji}
           </span>
           <h1>{T.title}</h1>
           <p className="lead">{T.tagline}</p>
@@ -237,7 +286,7 @@ function TopicPage({ id, focus }: { id: string; focus?: string }) {
       <nav className="pager">
         {prev ? (
           <a href={`#/topic/${prev.id}`} className="pager-link">
-            <small>← Week {prev.week}</small>
+            <small>← {weekText(prev)}</small>
             {prev.title}
           </a>
         ) : (
@@ -245,7 +294,7 @@ function TopicPage({ id, focus }: { id: string; focus?: string }) {
         )}
         {next ? (
           <a href={`#/topic/${next.id}`} className="pager-link right">
-            <small>Week {next.week} →</small>
+            <small>{weekText(next)} →</small>
             {next.title}
           </a>
         ) : (

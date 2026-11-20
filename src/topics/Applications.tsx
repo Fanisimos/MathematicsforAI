@@ -6,6 +6,8 @@ import { Callout, Section, Slider, Stat, Tabs } from '../components/UI';
 import { easeInOut, fmt, quadRoots, simpson, tween, type Fn } from '../lib/math';
 import { MatlabSection } from '../matlab/MatlabSection';
 import { ALL_GENS } from './gens';
+import { FOUND_GENS } from './gens_found';
+import { NUM_GENS } from './gens_num';
 import { autoView } from './shared';
 
 /* ── 1. Area between curves ──────────────────────────────── */
@@ -134,7 +136,7 @@ function ProbabilityArea() {
   );
 }
 
-const BOSS = Object.values(ALL_GENS).flat();
+const BOSS = [...Object.values(ALL_GENS), ...Object.values(FOUND_GENS), ...Object.values(NUM_GENS)].flat();
 
 export default function Applications() {
   return (
@@ -157,8 +159,8 @@ export default function Applications() {
         <Quiz id="w12-quiz" title="Applications Drills" blurb="Areas between curves, average values, signed area and probability densities." gens={ALL_GENS.applications} />
       </Section>
 
-      <Section id="boss" kicker="Final boss" title="Class test warm-up" intro="Every topic from weeks 7–12, mixed and timed. Run it a few times before the in-class test.">
-        <Quiz id="boss" boss title="TB1 Calculus Gauntlet" blurb="12 random questions across differentiation, optimisation, partials, integration and applications. 60 seconds each, full working shown after every answer." gens={BOSS} rounds={12} secondsPerQuestion={60} />
+      <Section id="boss" kicker="Final boss" title="Class test warm-up" intro="Every topic from the whole of Teaching Block 1, weeks 1–12, mixed and timed. Run it a few times before the in-class test.">
+        <Quiz id="boss" boss title="TB1 Gauntlet" blurb="15 random questions from all 16 topics: sets to Simpson's rule. 60 seconds each, full working shown after every answer." gens={BOSS} rounds={15} secondsPerQuestion={60} />
       </Section>
     </>
   );

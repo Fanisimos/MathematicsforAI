@@ -1,3 +1,4 @@
+import { MORE_SNIPPETS } from './snippets2';
 /**
  * MATLAB scripts for each topic. Each line is [code, optional note].
  * `output` is only given for fprintf-based scripts whose printed text is deterministic
@@ -14,7 +15,7 @@ export type Snip = {
   takeaway?: string;
 };
 
-export const SNIPPETS: Record<string, Snip[]> = {
+const CALC_SNIPPETS: Record<string, Snip[]> = {
   derivatives: [
     {
       title: 'Watch the secant slope converge',
@@ -285,3 +286,5 @@ export const SNIPPETS: Record<string, Snip[]> = {
     },
   ],
 };
+
+export const SNIPPETS: Record<string, Snip[]> = { ...CALC_SNIPPETS, ...MORE_SNIPPETS };

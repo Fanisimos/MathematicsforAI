@@ -36,6 +36,7 @@ export function Field({
   onClickPoint,
   children,
   ariaLabel,
+  paint,
 }: {
   f: (x: number, y: number) => number;
   view: View;
@@ -46,6 +47,8 @@ export function Field({
   onClickPoint?: (x: number, y: number) => void;
   children?: (c: FieldCtx) => ReactNode;
   ariaLabel?: string;
+  /** Optional categorical colouring: maps a raw value straight to RGB (no normalising, no bands). */
+  paint?: (v: number) => [number, number, number];
 }) {
   const canvas = useRef<HTMLCanvasElement>(null);
   const svg = useRef<SVGSVGElement>(null);
@@ -70,17 +73,21 @@ export function Field({
       }
     const img = ctx.createImageData(res, res);
     for (let k = 0; k < vals.length; k++) {
-      const t = (vals[k] - lo) / (hi - lo || 1);
-      let [r, g, b] = colormap(t);
-      const band = (t * bands) % 1;
-      if (band < 0.07) [r, g, b] = [r * 0.55, g * 0.55, b * 0.55];
+      let r: number, g: number, b: number;
+      if (paint) [r, g, b] = paint(vals[k]);
+      else {
+        const t = (vals[k] - lo) / (hi - lo || 1);
+        [r, g, b] = colormap(t);
+        const band = (t * bands) % 1;
+        if (bands > 0 && band < 0.07) [r, g, b] = [r * 0.55, g * 0.55, b * 0.55];
+      }
       img.data[k * 4] = r;
       img.data[k * 4 + 1] = g;
       img.data[k * 4 + 2] = b;
       img.data[k * 4 + 3] = 255;
     }
     ctx.putImageData(img, 0, 0);
-  }, [f, res, bands, xMin, xMax, yMin, yMax]);
+  }, [f, res, bands, xMin, xMax, yMin, yMax, paint]);
 
   const X = (x: number) => ((x - xMin) / (xMax - xMin)) * size;
   const Y = (y: number) => size - ((y - yMin) / (yMax - yMin)) * size;
