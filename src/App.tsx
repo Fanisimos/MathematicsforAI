@@ -1,10 +1,12 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { Suspense, useEffect, useState } from 'react';
+import { FeedbackCTA, FeedbackModal, FeedbackNudge, useActiveTime } from './components/Feedback';
 import { HeroDescent } from './components/HeroDescent';
 import { MatlabPage } from './matlab/MatlabPage';
 import { MathText } from './components/Tex';
 import { Callout, ProgressRing } from './components/UI';
 import { currentWeek, daysUntil, DEADLINES, TB1 } from './lib/course';
+import { openFeedback } from './lib/feedback';
 import { levelInfo, resetProgress, useProgress } from './lib/progress';
 import { GROUPS, TOPICS, topicPct, type TopicMeta } from './topics';
 
@@ -283,6 +285,7 @@ function TopicPage({ id, focus }: { id: string; focus?: string }) {
       <Suspense fallback={<div className="loading">Loading module…</div>}>
         <Comp />
       </Suspense>
+      <FeedbackCTA topicTitle={T.title} />
       <nav className="pager">
         {prev ? (
           <a href={`#/topic/${prev.id}`} className="pager-link">
@@ -319,6 +322,7 @@ function NotFound() {
 }
 
 export default function App() {
+  useActiveTime();
   const route = useRoute();
   const [path, query] = route.split('?');
   const parts = path.split('/').filter(Boolean);
@@ -339,9 +343,12 @@ export default function App() {
       <main>{page}</main>
       <footer className="footer">
         <div className="container">
-          Made by students, for students. An unofficial study companion, not affiliated with or endorsed by the university. Always check Canvas for official notes and deadlines.
+          <button className="btn btn-ghost fb-footer-btn" onClick={() => openFeedback('manual')}>💬 Give feedback</button>
+          <p>Made by students, for students. An unofficial study companion, not affiliated with or endorsed by the university. Always check Canvas for official notes and deadlines.</p>
         </div>
       </footer>
+      <FeedbackNudge />
+      <FeedbackModal />
     </>
   );
 }

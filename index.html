@@ -13,6 +13,15 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Static copy of the feedback form so Netlify Forms detects it at deploy time. The real form is rendered by React.
+         Netlify only stores the fields listed here, so this is also the complete list of what a review records.
+         Anonymous by design: no name, no student number, no usage history. -->
+    <form name="feedback" data-netlify="true" netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="feedback" />
+      <input name="rating" /><input name="helped" /><input name="topic" />
+      <textarea name="comments"></textarea><textarea name="mistakes"></textarea>
+      <input name="trigger" /><input name="app_version" /><input name="bot-field" />
+    </form>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
